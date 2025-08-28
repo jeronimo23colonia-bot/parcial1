@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Encuesta: Lenguaje de Programación Favorito</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    h2 { color: #333; }
+    .resultados { margin-top: 30px; }
+    table { border-collapse: collapse; width: 350px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #f0f0f0; }
+    .disabled { opacity: 0.6; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <h2>¿Cuál es tu lenguaje de programación favorito?</h2>
+  <form id="formulario">
+    <label><input type="radio" name="opcion" value="JavaScript" required> JavaScript</label><br>
+    <label><input type="radio" name="opcion" value="Python"> Python</label><br>
+    <label><input type="radio" name="opcion" value="C++"> C++</label><br>
+    <label><input type="radio" name="opcion" value="Otro"> Otro</label><br><br>
+    <button type="submit" id="btnVotar">Votar</button>
+  </form>
+
+  <div class="resultados">
+    <h3>Resultados</h3>
+    <table id="tablaResultados">
+      <thead>
+        <tr>
+          <th>Opción</th>
+          <th>Votos</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Resultados dinámicos -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const formulario = document.getElementById('formulario');
+    const btnVotar = document.getElementById('btnVotar');
+    const tablaResultados = document.getElementById('tablaResultados').querySelector('tbody');
+    let yaVoto = false;
+
+    // Función para actualizar la tabla de resultados
+    function actualizarResultados() {
+      fetch('http://localhost:3000/resultados')
+        .then(res => res.json())
+        .then(data => {
+          tablaResultados.innerHTML = '';
+          data.resultados.forEach(r => {
+            const fila = `<tr>
+              <td>${r.opcion}</td>
+              <td>${r.cantidad}</td>
+              <td>${r.porcentaje}%</td>
+            </tr>`;
+            tablaResultados.innerHTML += fila;
+          });
+        });
+    }
+
+    // Al cargar la página, mostrar resultados
+    actualizarResultados();
+
+    // Manejar el envío del formulario
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (yaVoto) return;
+      const opcion = formulario.opcion.value;
+      fetch('http://localhost:3000/votar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ opcion })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          actualizarResultados();
+          yaVoto = true;
+          formulario.classList.add('disabled');
+          btnVotar.disabled = true;
+        } else {
+          alert('Ocurrió un error: ' + data.error);
+        }
+      });
+    });
+  </script>
