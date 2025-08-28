@@ -1,1 +1,2 @@
-# parcial1
+**Nombre:** jeronimo.colonia  
+**Código:** 2235255
