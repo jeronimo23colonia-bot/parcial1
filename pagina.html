@@ -34,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Resultados dinámicos -->
+       
       </tbody>
     </table>
   </div>
@@ -45,7 +45,7 @@
     const tablaResultados = document.getElementById('tablaResultados').querySelector('tbody');
     let yaVoto = false;
 
-    // Función para actualizar la tabla de resultados
+    
     function actualizarResultados() {
       fetch('http://localhost:3000/resultados')
         .then(res => res.json())
@@ -62,10 +62,10 @@
         });
     }
 
-    // Al cargar la página, mostrar resultados
+    
     actualizarResultados();
 
-    // Manejar el envío del formulario
+    
     formulario.addEventListener('submit', function(e) {
       e.preventDefault();
       if (yaVoto) return;
