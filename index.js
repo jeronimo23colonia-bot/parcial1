@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const port = 3000;
 
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 
 
 const votos = {
@@ -35,6 +37,10 @@ app.get('/resultados', (req, res) => {
     porcentaje: total > 0 ? ((cantidad / total) * 100).toFixed(2) : '0.00'
   }));
   res.json({ total, resultados });
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pagina.html'));
 });
 
 app.listen(port, () => {
