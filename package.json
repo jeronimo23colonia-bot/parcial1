@@ -19,5 +19,6 @@
   "homepage": "https://github.com/jeronimo23colonia-bot/parcial1#readme",
   "dependencies": {
     "express": "^5.1.0"
-  }
+  },
+  "devDependencies": {}
 }
